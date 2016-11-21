@@ -1,6 +1,6 @@
 name:                webp
 version:             0.1.0.0
-synopsis:            Haskell bidings for libwebp
+synopsis:            Haskell bidings to libwebp
 description:         Please see README.md
 homepage:            https://github.com/pbogdan/webp#readme
 license:             BSD3
