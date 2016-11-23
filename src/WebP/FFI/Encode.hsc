@@ -1,5 +1,4 @@
-{-# LANGUAGE CPP #-}
-{-# ForeignFunctionInterface #-}
+{-# LANGUAGE CPP, ForeignFunctionInterface #-}
 
 module WebP.FFI.Encode
   ( c_WebPEncodeRGB

@@ -31,6 +31,7 @@ test-suite webp-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
+  other-modules:       WebPSpec
   build-depends:       base >= 4.8 && < 5
                      , bytestring >= 0.10.0 && < 0.11
                      , hspec >= 2.2.0 && < 2.3
