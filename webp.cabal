@@ -16,7 +16,10 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     WebP
-  other-modules:       WebP.Encode
+                     , WebP.Types
+  other-modules:       WebP.Decode
+                     , WebP.Encode
+                     , WebP.FFI.Decode
                      , WebP.FFI.Encode
   extra-libraries:     webp  
   build-depends:       base >= 4.7 && < 5

@@ -1,5 +1,3 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-
 module WebP.Encode
   ( Width(..)
   , Height(..)
@@ -22,29 +20,16 @@ import           Foreign
 import           Foreign.C.Types
 import           System.IO.Unsafe
 import           WebP.FFI.Encode
-
-newtype Width =
-  Width Int
-  deriving (Eq, Num, Ord, Show)
-
-newtype Height =
-  Height Int
-  deriving (Eq, Num, Ord, Show)
-
-newtype Quality =
-  Quality Float
-  deriving (Eq, Num, Ord, Show)
-
-data InputFormat
-  = RGB
-  | BGR
-  | RGBA
-  | BGRA
-  deriving (Eq, Show)
+import           WebP.Types
 
 encode :: InputFormat -> ByteString -> Width -> Height -> Quality -> ByteString
 encode input bytes (Width width) (Height height) (Quality quality) =
-  unsafePerformIO $
+  let (Image _ bytes') =
+        unsafePerformIO $ encode' input bytes width height quality
+  in bytes'
+
+encode' :: InputFormat -> ByteString -> Int -> Int -> Float -> IO Image
+encode' input bytes width height quality =
   Bytes.useAsCStringLen bytes $ \(bytesPtr, _) ->
     alloca $ \outPtr -> do
       len <-

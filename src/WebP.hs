@@ -1,6 +1,9 @@
 module WebP
-  (module WebP.Encode)
+  ( module X
+  )
 
 where
 
-import WebP.Encode
+import WebP.Decode as X
+import WebP.Encode as X
+import WebP.Types as X hiding (Image(..))
