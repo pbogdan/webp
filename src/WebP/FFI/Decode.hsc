@@ -1,6 +1,5 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE ForeignFunctionInterface #-}
-{-#  LANGUAGE RecordWildCards #-}
 
 module WebP.FFI.Decode
   ( c_WebPDecodeRGB
@@ -12,7 +11,6 @@ module WebP.FFI.Decode
 
 where
 
-import Control.Monad
 import Foreign
 import Foreign.C
 import Foreign.C.Types
