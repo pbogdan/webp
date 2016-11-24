@@ -84,3 +84,9 @@ spec = do
           let !encoded = losslessEncodeRGBA bytes width height
               !decoded = decodeRGBA encoded
           in decoded == bytes
+      it "getInfo computes correct width and height" $
+        property $ \(ImageRGB bytes width height) ->
+          let info = getInfo (losslessEncodeRGB bytes width height)
+          in case info of
+               Nothing -> False
+               Just (w, h) -> w == width && h == height
