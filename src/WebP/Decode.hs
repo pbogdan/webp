@@ -42,7 +42,8 @@ decode' input bytes =
         bs <-
           withForeignPtr fr $ \x ->
             Bytes.packCStringLen
-              (castPtr x, fromIntegral width * fromIntegral height * 3)
+              ( castPtr x
+              , fromIntegral width * fromIntegral height * stride input)
         return $ Image fr bs
 
 decodingFunction :: InputFormat

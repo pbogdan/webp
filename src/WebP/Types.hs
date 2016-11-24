@@ -6,6 +6,7 @@ module WebP.Types
   , Height(..)
   , Quality(..)
   , InputFormat(..)
+  , stride
   , Alpha(..)
   , BitstreamFeatures(..)
   )
@@ -38,6 +39,11 @@ data InputFormat
   | BGRA
   deriving (Eq, Show)
 
+stride :: InputFormat -> Int
+stride RGB = 3
+stride BGR = 3
+stride RGBA = 4
+stride BGRA = 4
 
 data Alpha
   = HasAlpha

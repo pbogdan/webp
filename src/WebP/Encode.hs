@@ -38,7 +38,7 @@ encode' input bytes width height quality =
           (castPtr bytesPtr)
           (CInt (fromIntegral width))
           (CInt (fromIntegral height))
-          (CInt (fromIntegral (width * 3)))
+          (CInt (fromIntegral (width * stride input)))
           (CFloat quality)
           outPtr
       out <- peek outPtr
@@ -85,7 +85,7 @@ losslessEncode input bytes (Width width) (Height height) =
           (castPtr bytesPtr)
           (CInt (fromIntegral width))
           (CInt (fromIntegral height))
-          (CInt (fromIntegral (width * 3)))
+          (CInt (fromIntegral (width * stride input)))
           outPtr
       out <- peek outPtr
       Bytes.packCStringLen (castPtr out, fromIntegral len)
