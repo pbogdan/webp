@@ -1,4 +1,6 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# OPTIONS_GHC -funbox-strict-fields #-}
+
 
 module WebP.Types
   (Image(..)
@@ -17,8 +19,7 @@ import Data.ByteString (ByteString)
 import Foreign
 import Foreign.C.Types
 
-data Image =  Image !(ForeignPtr CUChar) !(ByteString)
-
+data Image =  Image !(ForeignPtr CUChar) !ByteString
 
 newtype Width =
   Width Int
@@ -51,7 +52,7 @@ data Alpha
   deriving (Eq, Show)
 
 data BitstreamFeatures =
-  BitstreamFeatures Width
-                    Height
-                    Alpha
+  BitstreamFeatures !Width
+                    !Height
+                    !Alpha
   deriving (Eq, Show)

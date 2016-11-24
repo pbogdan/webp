@@ -1,6 +1,7 @@
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
+{-# OPTIONS_GHC -funbox-strict-fields #-}
 
 module WebPSpec
   (spec)
@@ -28,9 +29,9 @@ divisors
 divisors n = 1 : filter ((== 0) . rem n) [2 .. n `div` 2]
 
 data ImageRGB =
-  ImageRGB ByteString
-           Width
-           Height
+  ImageRGB !ByteString
+           !Width
+           !Height
   deriving (Show)
 
 instance Arbitrary ImageRGB where
@@ -45,7 +46,7 @@ instance Arbitrary ImageRGB where
     return $ ImageRGB bytes (Width width) (Height height)
 
 data ImageRGBA =
-  ImageRGBA ByteString Width Height
+  ImageRGBA !ByteString !Width !Height
   deriving (Show)
 
 data PixelRGBA =
