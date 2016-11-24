@@ -53,6 +53,7 @@ instance Arbitrary InputWithAlpha where
 main :: IO ()
 main = hspec spec
 
+{-# ANN spec "HLint: ignore Redundant do" #-}
 spec :: Spec
 spec = do
   describe "WebP" $ do
