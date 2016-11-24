@@ -12,7 +12,9 @@ dependencies:
     - sudo apt-get install libwebp-dev
   override:
     - stack --no-terminal setup
+    - stack --no-terminal --stack-yaml stack-ghc8.yml setup
 
 test:
   override:
     - stack --no-terminal test
+    - stack --no-terminal  --stack-yaml stack-ghc8.yml test
