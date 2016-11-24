@@ -1,7 +1,10 @@
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module WebPSpec where
+module WebPSpec
+  (spec)
+
+where
 
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as Bytes
@@ -11,20 +14,31 @@ import           Test.QuickCheck
 import           Test.QuickCheck.Instances ()
 import           WebP
 
-data Input =
-  Input ByteString
+divisors
+  :: forall b.
+     Integral b
+  => b -> [b]
+divisors n = 1 : filter ((== 0) . rem n) [2 .. n `div` 2]
+
+data ImageRGB =
+  ImageRGB ByteString
+           Width
+           Height
   deriving (Show)
 
-instance Arbitrary Input where
-  arbitrary =
-    Input <$>
-    arbitrary `suchThat`
-    (\s ->
-       Bytes.length s `mod` 3 == 0 &&
-       Bytes.length s `mod` 2 == 0 && Bytes.length s > 0)
+instance Arbitrary ImageRGB where
+  arbitrary = do
+    bytes <-
+      arbitrary `suchThat`
+      (\s -> Bytes.length s `mod` 3 == 0 && Bytes.length s > 0)
+    let divs = divisors $ Bytes.length bytes `div` 3
+    w <- elements divs
+    let width = Bytes.length bytes `div` 3 `div` w
+        height = Bytes.length bytes `div` 3 `div` width
+    return $ ImageRGB bytes (Width width) (Height height)
 
-data InputWithAlpha =
-  InputWithAlpha ByteString
+data ImageRGBA =
+  ImageRGBA ByteString Width Height
   deriving (Show)
 
 data PixelRGBA =
@@ -44,14 +58,16 @@ instance Arbitrary PixelRGBA where
 toBS :: PixelRGBA -> ByteString
 toBS (PixelRGBA bs) = bs
 
-instance Arbitrary InputWithAlpha where
+instance Arbitrary ImageRGBA where
   arbitrary = do
     (pixels :: [PixelRGBA]) <-
       arbitrary `suchThat` (\x -> length x > 2 && length x `mod` 2 == 0)
-    return $ InputWithAlpha $ Bytes.concat (map toBS pixels)
-
-main :: IO ()
-main = hspec spec
+    let bytes = Bytes.concat (map toBS pixels)
+    let divs = divisors $ Bytes.length bytes `div` 4
+    w <- elements divs
+    let width = Bytes.length bytes `div` 4 `div` w
+        height = Bytes.length bytes `div` 4 `div` width
+    return $ ImageRGBA bytes (Width width) (Height height)
 
 {-# ANN spec "HLint: ignore Redundant do" #-}
 spec :: Spec
@@ -59,19 +75,12 @@ spec = do
   describe "WebP" $ do
     modifyMaxSize (const 10000) $ do
       it "losslessEncodeRGB . decodeRGB  == id" $
-        property $ \(Input bytes) ->
-          let len = Bytes.length bytes
-              !encoded =
-                losslessEncodeRGB bytes (Width (len `div` 3 `div` 2)) (Height 2)
+        property $ \(ImageRGB bytes width height) ->
+          let !encoded = losslessEncodeRGB bytes width height
               !decoded = decodeRGB encoded
           in decoded == bytes
       it "for visible pixels: losslessEncodeRGBA . decodeRGBA  == id" $
-        property $ \(InputWithAlpha bytes) ->
-          let len = Bytes.length bytes
-              !encoded =
-                losslessEncodeRGBA
-                  bytes
-                  (Width (len `div` 4 `div` 2))
-                  (Height 2)
+        property $ \(ImageRGBA bytes width height) ->
+          let !encoded = losslessEncodeRGBA bytes width height
               !decoded = decodeRGBA encoded
           in decoded == bytes
