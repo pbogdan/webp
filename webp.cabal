@@ -38,7 +38,7 @@ test-suite webp-test
                      , QuickCheck >= 2.8.0 && < 2.9
                      , quickcheck-instances >= 0.3.0 && < 0.4
                      , webp >= 0.1.0 && < 0.2
-  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N -Wall
   default-language:    Haskell2010
 
 source-repository head
