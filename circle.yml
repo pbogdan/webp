@@ -16,5 +16,5 @@ dependencies:
 
 test:
   override:
-    - stack --no-terminal test
-    - stack --no-terminal  --stack-yaml stack-ghc8.yml test
+    - case $CIRCLE_NODE_INDEX in 0) stack --no-terminal test ;; 1) stack --no-terminal  --stack-yaml stack-ghc8.yml test ;; esac:
+        parallel: true
