@@ -13,6 +13,8 @@ dependencies:
   override:
     - stack --no-terminal setup
     - stack --no-terminal --stack-yaml stack-ghc8.yml setup
+    - stack --no-terminal build --test --only-dependencies -j1
+    - stack --no-terminal --stack-yaml stack-ghc8.yml build --test --only-dependencies -j1
 
 test:
   override:
