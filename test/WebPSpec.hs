@@ -1,5 +1,6 @@
 {-# LANGUAGE BangPatterns #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 
 module WebPSpec
   (spec)
@@ -8,11 +9,17 @@ where
 
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString as Bytes
+import           Data.Word
 import           Test.Hspec
 import           Test.Hspec.QuickCheck
 import           Test.QuickCheck
-import           Test.QuickCheck.Instances ()
 import           WebP
+
+instance Arbitrary Bytes.ByteString where
+    arbitrary = do
+      (x :: [Word8]) <- listOf (elements [0..255])
+      return $  Bytes.pack x
+    shrink xs = Bytes.pack <$> shrink (Bytes.unpack xs)
 
 divisors
   :: forall b.
@@ -49,10 +56,10 @@ data PixelRGBA =
 -- it is zeroed out after decoding. It makes testing a bit easier.
 instance Arbitrary PixelRGBA where
   arbitrary = do
-    r <- arbitrary
-    g <- arbitrary
-    b <- arbitrary
-    a <- arbitrary `suchThat` (> 0)
+    r <- elements [0..255]
+    g <- elements [0..255]
+    b <- elements [0..255]
+    a <- elements [1..255]
     return $ PixelRGBA $ Bytes.pack [r, g, b, a]
 
 toBS :: PixelRGBA -> ByteString
