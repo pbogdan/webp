@@ -7,15 +7,15 @@
 -- the following format:
 --
 -- @
---     import qualified Data.ByteString as Bytes
---     import Data.Word
+-- import qualified Data.ByteString as Bytes
+-- import Data.Word
 --
---     Bytes.pack ([r, g, b, r, g, b, ..] :: Word8)
+-- Bytes.pack ([r, g, b, r, g, b, ..] :: Word8)
 -- @
 module WebP
   ( module WebP.Types
-  , module WebP.Encode
   , module WebP.Decode
+  , module WebP.Encode
   )
 
 where
