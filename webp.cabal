@@ -1,7 +1,7 @@
 name:                webp
 version:             0.1.0.0
 synopsis:            Haskell bidings to libwebp
-description:         Please see README.md
+description:         Haskell bindings to libwebp, providing support for encoding/decoding of images in WebP format in Haskell.
 homepage:            https://github.com/pbogdan/webp#readme
 license:             BSD3
 license-file:        LICENSE
