@@ -1,6 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE BangPatterns #-}
 
+-- | WebP decoding functions.
 module WebP.Decode
   ( decodeRGB
   , decodeBGR
@@ -57,15 +58,21 @@ decodingFunction BGR = c_WebPDecodeBGR
 decodingFunction RGBA = c_WebPDecodeRGBA
 decodingFunction BGRA = c_WebPDecodeBGRA
 
+-- | Deocde an array of bytes in RGB layout.
 decodeRGB :: ByteString -> ByteString
 decodeRGB = decode RGB
+-- | Deocde an array of bytes in BGR layout.
 decodeBGR :: ByteString -> ByteString
 decodeBGR = decode BGR
+-- | Deocde an array of bytes in RGBA layout.
 decodeRGBA :: ByteString -> ByteString
 decodeRGBA = decode RGBA
+-- | Deocde an array of bytes in BGRA layout.
 decodeBGRA :: ByteString -> ByteString
 decodeBGRA = decode BGRA
 
+
+-- | Validate the WebP image header and retrieve the image width and height.
 getInfo :: ByteString -> Maybe (Width, Height)
 getInfo bytes =
   unsafePerformIO $
